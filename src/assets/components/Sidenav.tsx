@@ -4,6 +4,8 @@ import type { Category } from "../types";
 type Props = {
   categories: Category[];
   loading: boolean;
+  selectedCategory: Category;
+  setSelectedCategory: (category: Category) => void;
 };
 
 const selectedPops = {
@@ -12,10 +14,7 @@ const selectedPops = {
   fontWeight: "bold",
 };
 
-function Sidenav({ categories }: Props) {
-  const selected = {
-    strCategory: "Beef",
-  };
+function Sidenav({ categories, setSelectedCategory, selectedCategory }: Props) {
   return (
     <>
       <Heading color="blue.400" fontSize={12} fontWeight="bold" mb={4}>
@@ -24,12 +23,13 @@ function Sidenav({ categories }: Props) {
       <Stack>
         {categories.map((c) => (
           <Link
+            onClick={() => setSelectedCategory(c)}
             px={2}
             py={1}
             borderRadius={5}
             key={c.strCategory}
             _hover={{ textDecoration: "none" }}
-            {...(selected.strCategory == c.strCategory && selectedPops)}
+            {...(selectedCategory.strCategory == c.strCategory && selectedPops)}
           >
             {c.strCategory}
           </Link>

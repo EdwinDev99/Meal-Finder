@@ -8,10 +8,11 @@ import type { CategoriesResponse, Category } from "./assets/types";
 function App() {
   const url = "https://www.themealdb.com/api/json/v1/1/list.php?c=list";
 
+  const [selectedCategory, setSelectedCategory] = useState<Category>({
+    strCategory: "Beef",
+  });
   const [data, setData] = useState<Category[]>([]);
   const [loading, setLoading] = useState(false);
-
-  console.log(data);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -46,7 +47,12 @@ function App() {
         <Header />
       </GridItem>
       <GridItem p="5" rowSpan={1} colSpan={1} height="calc(100vh)">
-        <Sidenav categories={data} loading={loading} />
+        <Sidenav
+          categories={data}
+          loading={loading}
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
+        />
       </GridItem>
       <GridItem rowSpan={1} colSpan={4}>
         <MainContent />
