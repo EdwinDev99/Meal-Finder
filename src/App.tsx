@@ -15,6 +15,7 @@ function App() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    let ignore = false;
     const controller = new AbortController();
     const { signal } = controller;
 
@@ -24,17 +25,24 @@ function App() {
         return response.json() as Promise<CategoriesResponse>;
       })
       .then((data) => {
-        setData(data.meals);
+        if (!ignore) {
+          setData(data.meals);
+        }
       })
       .catch((error) => {
         console.log(error);
       })
-      .finally(() => setLoading(false));
+      .finally(() => {
+        if (!ignore) {
+          setLoading(false);
+        }
+      });
 
-    return () => controller.abort();
+    return () => {
+      ignore = true;
+      controller.abort();
+    };
   }, []);
-
-  if (loading) return <p>Cargando...</p>;
 
   return (
     <Grid
