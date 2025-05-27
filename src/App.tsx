@@ -3,29 +3,57 @@ import Header from "./assets/components/Header";
 import Sidenav from "./assets/components/Sidenav";
 import MainContent from "./assets/components/MainContent";
 import { useState } from "react";
-import type { Category } from "./assets/types";
+import type { Category, Meal } from "./assets/types";
 import useHttpData from "./assets/hooks/useHttpData";
 
 function App() {
   const url = "https://www.themealdb.com/api/json/v1/1/list.php?c=list";
 
-  const [selectedCategory, setSelectedCategory] = useState<Category>({
+  const makeMEalUrl = (Category: Category) =>
+    `https://www.themealdb.com/api/json/v1/1/filter.php?c=${Category.strCategory}`;
+
+  const defaultCategory = {
     strCategory: "Beef",
-  });
+  };
+
+  const [selectedCategory, setSelectedCategory] =
+    useState<Category>(defaultCategory);
 
   const { loading, data } = useHttpData<Category>(url);
+  const { loading: loadingMeal, data: dataMeal } = useHttpData<Meal>(
+    makeMEalUrl(defaultCategory)
+  );
+
+  console.log({ dataMeal });
 
   return (
     <Grid
-      fontSize={14}
-      h="100px"
+      templateAreas={`"header header"
+                        "nav main"`}
       gridTemplateRows={"60px 1fr"}
-      templateColumns="repeat(5,1fr)"
+      gridTemplateColumns={{ md: `250px 1fr`, sm: `0 1fr` }}
+      fontSize={14}
     >
-      <GridItem rowSpan={1} colSpan={5}>
+      <GridItem
+        zIndex="1"
+        pos="sticky"
+        top="0"
+        rowSpan={1}
+        colSpan={5}
+        bg="white"
+        pt="7px"
+        boxShadow="lg"
+      >
         <Header />
       </GridItem>
-      <GridItem p="5" rowSpan={1} colSpan={1} height="calc(100vh)">
+      <GridItem
+        p="5"
+        position="sticky"
+        height="calc(100vh - 60px)"
+        top="60px"
+        left="0"
+        overflow="auto"
+      >
         <Sidenav
           categories={data}
           loading={loading}
@@ -33,8 +61,8 @@ function App() {
           setSelectedCategory={setSelectedCategory}
         />
       </GridItem>
-      <GridItem rowSpan={1} colSpan={4}>
-        <MainContent />
+      <GridItem p="4" bg="gray.100" rowSpan={1} colSpan={4}>
+        <MainContent loadingMeal={loadingMeal} dataMeal={dataMeal} />
       </GridItem>
     </Grid>
   );
