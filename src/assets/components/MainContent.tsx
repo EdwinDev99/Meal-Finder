@@ -6,9 +6,10 @@ import SkeletonCard from "./SkeletonCard";
 type Props = {
   loadingMeal: boolean;
   dataMeal: Meal[];
+  openRecipe: (meal: Meal) => void;
 };
 
-function MainContent({ dataMeal, loadingMeal }: Props) {
+function MainContent({ dataMeal, loadingMeal, openRecipe }: Props) {
   const skeletons = [1, 2, 3, 4, 5, 6, 7, 8];
 
   return (
@@ -16,7 +17,9 @@ function MainContent({ dataMeal, loadingMeal }: Props) {
       {loadingMeal &&
         skeletons.map((skeleton) => <SkeletonCard key={skeleton} />)}
       {!loadingMeal &&
-        dataMeal.map((m) => <MealCard key={m.idMeal} meal={m} />)}
+        dataMeal.map((m) => (
+          <MealCard openRecipe={() => openRecipe(m)} key={m.idMeal} meal={m} />
+        ))}
     </SimpleGrid>
   );
 }

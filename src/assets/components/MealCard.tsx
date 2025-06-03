@@ -11,9 +11,10 @@ import type { Meal } from "../types";
 
 type Props = {
   meal: Meal;
+  openRecipe: () => void;
 };
 
-function MealCard({ meal }: Props) {
+function MealCard({ meal, openRecipe }: Props) {
   return (
     <Card boxShadow="lg">
       <CardBody gap="2">
@@ -27,7 +28,12 @@ function MealCard({ meal }: Props) {
         </Heading>
       </CardBody>
       <CardFooter pt="0">
-        <Button variant="solid" color="white" bgColor="blue.400">
+        <Button
+          onClick={openRecipe}
+          variant="solid"
+          color="white"
+          bgColor="blue.400"
+        >
           Ver receta
         </Button>
       </CardFooter>
