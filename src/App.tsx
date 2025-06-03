@@ -3,8 +3,9 @@ import Header from "./assets/components/Header";
 import Sidenav from "./assets/components/Sidenav";
 import MainContent from "./assets/components/MainContent";
 import { useState } from "react";
-import type { Category, Meal } from "./assets/types";
+import type { Category, Meal, SearchForm } from "./assets/types";
 import useHttpData from "./assets/hooks/useHttpData";
+import axios from "axios";
 
 function App() {
   const url = "https://www.themealdb.com/api/json/v1/1/list.php?c=list";
@@ -20,11 +21,30 @@ function App() {
     useState<Category>(defaultCategory);
 
   const { loading, data } = useHttpData<Category>(url);
-  const { loading: loadingMeal, data: dataMeal } = useHttpData<Meal>(
-    makeMEalUrl(defaultCategory)
-  );
+  const {
+    loading: loadingMeal,
+    data: dataMeal,
+    setData: setMeals,
+    setLoading: setLoadingMeal,
+  } = useHttpData<Meal>(makeMEalUrl(defaultCategory));
 
   console.log({ dataMeal });
+
+  const searchApi = (searchForm: SearchForm) => {
+    const url = `https://www.themealdb.com/api/json/v1/1/search.php?s=${searchForm.search}`;
+    setLoadingMeal(true);
+    axios
+      .get<{ meals: Meal[] }>(url)
+      .then(({ data }) => {
+        setMeals(data.meals);
+        return data.meals;
+      })
+      .catch((error) => {
+        console.error("Error al buscar recetas:", error);
+        return null;
+      })
+      .finally(() => setLoadingMeal(false));
+  };
 
   return (
     <Grid
@@ -44,7 +64,7 @@ function App() {
         pt="7px"
         boxShadow="lg"
       >
-        <Header />
+        <Header onSubmit={searchApi} />
       </GridItem>
       <GridItem
         p="5"
