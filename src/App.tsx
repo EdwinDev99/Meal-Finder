@@ -53,7 +53,11 @@ function App() {
       .finally(() => setLoadingMeal(false));
   };
 
-  const { fetch, loading: loadingMealdetails } = useFetch<MealDetails>();
+  const {
+    fetch,
+    loading: loadingMealdetails,
+    data: mealDetailData,
+  } = useFetch<MealDetails>();
 
   const searchMEalDetails = (meal: Meal) => {
     onOpen();
@@ -106,6 +110,7 @@ function App() {
         </GridItem>
       </Grid>
       <RecipeModal
+        data={mealDetailData}
         loading={loadingMealdetails}
         isOpen={isOpen}
         onClose={onClose}
