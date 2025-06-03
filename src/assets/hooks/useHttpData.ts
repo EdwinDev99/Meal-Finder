@@ -16,7 +16,6 @@ export default function useHttpData<T>(url: string) {
       .then((response) => response.json())
       .then((json) => {
         if (!ignore) {
-          // Asumimos que la respuesta tiene el formato { meals: [...] }
           setData(json.meals || []);
         }
       })
