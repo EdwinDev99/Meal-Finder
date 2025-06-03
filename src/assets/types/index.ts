@@ -11,3 +11,8 @@ export type Meal = {
 export type SearchForm = {
   search: string;
 };
+
+//no hacer en la vida real esto es un atajo
+export type MealDetails = {
+  [key: string]: string;
+};

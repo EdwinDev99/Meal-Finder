@@ -8,22 +8,22 @@ import {
   ModalHeader,
   ModalOverlay,
 } from "@chakra-ui/react";
+import RecipeModalSkeleton from "./RecipeModalSkeleton";
 
 type Props = {
   isOpen: boolean;
   onClose: () => void;
+  loading: boolean;
 };
 
-function RecipeModal({ isOpen, onClose }: Props) {
+function RecipeModal({ isOpen, onClose, loading }: Props) {
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Modal Title</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>hola mundo</ModalBody>
-
+          <RecipeModalSkeleton />
+          {loading ? `skeleton` : "contenido"}
           <ModalFooter>
             <Button colorScheme="blue" mr={3} onClick={onClose}>
               Close
